@@ -1,0 +1,5 @@
+Storyboard Studio Next 0.12.0
+
+Quit Storyboard Studio Next and use the pasteable Terminal build command supplied with this release, or extract this ZIP and run bash BUILD_MACOS.sh. The original Storyboard Studio app remains separate. Existing Next project/storage identity is preserved.
+
+See PATCH_TESTING.md for every change and WORKFLOW_MANUAL.md for workflow rules.

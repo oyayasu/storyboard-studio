@@ -1,0 +1,1 @@
+JSZip 3.10.1 is bundled locally for DOCX ZIP reading. It is loaded from disk without a CDN or network request. Its MIT license is included in JSZip-LICENSE.md. The bundle includes its upstream compression dependencies and notices.

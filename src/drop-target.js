@@ -1,0 +1,2 @@
+export function closestSlot(point,slots){if(!point||!slots.length)return null;return slots.map(slot=>{const r=slot.rect,dx=Math.max(r.left-point.x,0,point.x-r.right),dy=Math.max(r.top-point.y,0,point.y-r.bottom);return{slot,distance:dx*dx+dy*dy};}).sort((a,b)=>a.distance-b.distance)[0].slot;}
+export function slotIntent(rect,x,external=false,hasCard=true){const frac=(x-rect.left)/Math.max(1,rect.width),edge=external?.38:.28;return hasCard&&frac>=edge&&frac<=1-edge?'onto':frac<.5?'before':'after';}

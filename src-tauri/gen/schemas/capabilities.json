@@ -1,0 +1,1 @@
+{"main-window":{"identifier":"main-window","description":"Local app event listener for managed close and progress","local":true,"windows":["main"],"permissions":["core:event:default","core:window:allow-scale-factor","core:window:allow-inner-position","core:window:allow-cursor-position"]}}

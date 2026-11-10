@@ -1,0 +1,12 @@
+import {parseSheetLayout} from './sheet-layout-model.js';
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+export function createSheetLayouts(host){
+ function sync(){window.SSImporter.setCustomTemplates(host.get()||[]);}
+ function show(){
+  sync();const layouts=window.SSImporter.templates;
+  const body=`<div class="sheet-layout-list">${layouts.map(t=>`<section class="sheet-layout-item"><svg viewBox="0 0 ${t.width} ${t.height}" role="img" aria-label="${esc(t.label)}"><rect width="100%" height="100%" fill="white"/>${t.boxes.map((b,i)=>`<rect x="${b[0]}" y="${b[1]}" width="${b[2]}" height="${b[3]}" fill="#e9effa" stroke="#536f9c" stroke-width="${Math.max(t.width,t.height)/250}"/><text x="${b[0]+b[2]/2}" y="${b[1]+b[3]/2}" text-anchor="middle" dominant-baseline="middle" fill="#304a74" font-size="${Math.min(b[2],b[3])/4}">${i+1}</text>`).join('')}</svg><div><strong>${esc(t.label)}</strong><small>${t.boxes.length} cards · ${t.width} × ${t.height}${t.custom?'':' · Built in'}</small>${t.custom?`<button data-act="sheet-layout-remove" data-id="${esc(t.id)}">Remove</button>`:''}</div></section>`).join('')}</div><button data-act="sheet-layout-add">＋ Add layout file</button><input data-sheet-layout-file type="file" accept=".json,.sslayout,application/json" hidden><p class="muted">Added formats are recognized during normal image import. Printing keeps its current layout. Layouts need clear frame borders for reliable automatic detection.</p>`;
+  host.modal('Storyboard sheet layouts',body,[{text:'Close',action:'close-modal',primary:true}]);
+  document.querySelector('[data-sheet-layout-file]').onchange=async e=>{const file=e.target.files[0];if(!file)return;try{if(file.size>262144)throw Error('Layout files must be smaller than 256 KB.');const layout=parseSheetLayout(await file.text(),window.SSImporter.templates.filter(t=>!t.custom).map(t=>t.id));if((host.get()||[]).some(t=>t.id===layout.id))throw Error('A layout with this ID is already installed. Remove it before adding a revised file.');if((host.get()||[]).length>=40)throw Error('Keep up to 40 custom sheet layouts.');host.commit('Add storyboard sheet layout',()=>host.set([...(host.get()||[]),layout]));sync();show();host.notify('Storyboard sheet layout added.');}catch(err){host.notify(err.message||String(err));}};
+ }
+ return {sync,show,add:()=>document.querySelector('[data-sheet-layout-file]')?.click(),remove:id=>{host.commit('Remove sheet layout',()=>host.set((host.get()||[]).filter(t=>t.id!==id)));sync();show();}};
+}

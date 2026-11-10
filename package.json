@@ -1,0 +1,10 @@
+{
+  "name": "storyboard-studio",
+  "version": "0.12.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test scripts/*.test.mjs",
+    "check": "python3 scripts/check_project.py"
+  }
+}
